@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot Interface with Material-UI Style</title>
+    <!-- Material-UI core CSS -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-icons/5.4.24/iconfont/material-icons.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mui/material@5.0.5/dist/material.min.css" />
+    
+    <!-- Custom CSS -->
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 90vw;
+            max-width: 600px;
+            height: 80vh;
+            background-color: #fff;
+            box-shadow: 0 3px 5px rgba(0,0,0,0.1);
+            overflow: hidden;
+            padding: 16px;
+        }
+        
+        .chat-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .message-container {
+            margin-bottom: 16px;
+            padding: 8px;
+            border-radius: 8px;
+            max-width: 70%;
+        }
+        
+        .user-message {
+            align-self: flex-end;
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 8px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .bot-message {
+            align-self: flex-start;
+            background-color: #eee;
+            color: #333;
+            padding: 8px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .input-container {
+            display: flex;
+            width: 100%;
+            border-top: 1px solid #ccc;
+            padding: 8px;
+            align-items: center;
+        }
+        
+        .input-field {
+            flex: 1;
+            margin-right: 8px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+            outline: none;
+        }
+        
+        .send-button {
+            background-color: #1976D2;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            outline: none;
+            transition: background-color 1s ease;
+        }
+        
+        .send-button:hover {
+            background-color: #1565C0;
+        }
+        
+        @media (min-width: 600px) {
+            .container {
+                width: 40vw;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Deepak's Bank Chatbot</h2>
+    <div class="chat-container" id="chat-container">
+        <!-- Messages will be dynamically added here -->
+    </div>
+
+    <div class="input-container">
+        <input type="text" id="user-input" class="input-field" placeholder="Type your message here...">
+        <button class="send-button" onclick="sendMessage()">Send</button>
+    </div>
+</div>
+
+<!-- JavaScript remains unchanged -->
+<script>
+    function sendMessage() {
+        var userMessage = document.getElementById("user-input").value.trim();
+        if (userMessage !== "") {
+            displayMessage(userMessage, 'user');
+            document.getElementById("user-input").value = "";
+            // Example fetch code remains unchanged
+            
+            fetch('/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'user_message=' + encodeURIComponent(userMessage)
+            })
+            .then(response => response.json())
+            .then(data => {
+                displayMessage(data.response, 'bot');
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    }
+
+    function displayMessage(message, sender) {
+        var chatContainer = document.getElementById("chat-container");
+        var messageContainer = document.createElement('div');
+        messageContainer.classList.add('message-container');
+        messageContainer.innerText = message;
+        
+        if (sender === 'user') {
+            messageContainer.classList.add('user-message');
+        } else {
+            messageContainer.classList.add('bot-message');
+        }
+
+        chatContainer.appendChild(messageContainer);
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+</script>
+
+</body>
+</html>
