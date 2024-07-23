@@ -1,7 +1,7 @@
-Sure, here's a comprehensive README file for your bank chatbot project:
 
+# **Bank Chatbot**
 ```markdown
-***Bank Chatbot***
+
 
 This project is a bank chatbot application that allows users to interact with a dummy bank API. The chatbot can handle various financial queries and transactions.
 
